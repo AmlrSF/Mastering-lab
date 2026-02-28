@@ -121,20 +121,18 @@ export class ProjectService {
 
   constructor() { }
 
-  // ============= PROJECT METHODS =============
-  
-  // GET all projects
+ 
   getProjects(): Observable<Project[]> {
     return of(this.projects);
   }
 
-  // GET project by ID
+  
   getProjectById(id: number): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === id);
     return of(project);
   }
 
-  // ADD new project
+  
   addProject(project: Project): Observable<Project> {
     const newId = Math.max(...this.projects.map(p => p.id || 0), 0) + 1;
     const newProject = { 
@@ -147,7 +145,7 @@ export class ProjectService {
     return of(newProject);
   }
 
-  // UPDATE project
+ 
   updateProject(updatedProject: Project): Observable<Project> {
     const index = this.projects.findIndex(p => p.id === updatedProject.id);
     if (index !== -1) {
@@ -156,7 +154,7 @@ export class ProjectService {
     return of(updatedProject);
   }
 
-  // DELETE project
+ 
   deleteProject(id: number): Observable<boolean> {
     const index = this.projects.findIndex(p => p.id === id);
     if (index !== -1) {
@@ -166,15 +164,13 @@ export class ProjectService {
     return of(false);
   }
 
-  // GET projects by status
+  
   getProjectsByStatus(status: 'En cours' | 'Terminé' | 'En pause'): Observable<Project[]> {
     const filteredProjects = this.projects.filter(p => p.status === status);
     return of(filteredProjects);
   }
 
-  // ============= TASK METHODS (Matching component calls) =============
   
-  // ADD task to project - matches component's addTask()
   addTask(projectId: number, task: Task): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === projectId);
     if (project) {
@@ -185,7 +181,7 @@ export class ProjectService {
     return of(project);
   }
 
-  // UPDATE task - matches component's updateTask()
+  
   updateTask(projectId: number, updatedTask: Task): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === projectId);
     if (project) {
@@ -197,7 +193,7 @@ export class ProjectService {
     return of(project);
   }
 
-  // DELETE task - matches component's deleteTask()
+ 
   deleteTask(projectId: number, taskId: number): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === projectId);
     if (project) {
@@ -206,29 +202,27 @@ export class ProjectService {
     return of(project);
   }
 
-  // ============= ADDITIONAL TASK METHODS =============
-  
-  // Get all tasks from a project
+ 
   getProjectTasks(projectId: number): Observable<Task[]> {
     const project = this.projects.find(p => p.id === projectId);
     return of(project?.tasks || []);
   }
 
-  // Get tasks by status
+
   getTasksByStatus(projectId: number, status: 'En attente' | 'En cours' | 'Terminé'): Observable<Task[]> {
     const project = this.projects.find(p => p.id === projectId);
     const filteredTasks = project?.tasks.filter(t => t.status === status) || [];
     return of(filteredTasks);
   }
 
-  // Get tasks by priority
+  
   getTasksByPriority(projectId: number, priority: 'Haute' | 'Moyenne' | 'Basse'): Observable<Task[]> {
     const project = this.projects.find(p => p.id === projectId);
     const filteredTasks = project?.tasks.filter(t => t.priority === priority) || [];
     return of(filteredTasks);
   }
 
-  // Update task status
+  
   updateTaskStatus(projectId: number, taskId: number, status: 'En attente' | 'En cours' | 'Terminé'): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === projectId);
     if (project) {
@@ -240,9 +234,7 @@ export class ProjectService {
     return of(project);
   }
 
-  // ============= STATISTICS METHODS =============
   
-  // GET project statistics
   getProjectStats(): Observable<any> {
     const stats = {
       total: this.projects.length,
@@ -250,7 +242,7 @@ export class ProjectService {
       termine: this.projects.filter(p => p.status === 'Terminé').length,
       enPause: this.projects.filter(p => p.status === 'En pause').length,
       
-      // Task statistics
+      
       totalTasks: this.projects.reduce((sum, p) => sum + p.tasks.length, 0),
       tasksEnAttente: this.projects.reduce((sum, p) => 
         sum + p.tasks.filter(t => t.status === 'En attente').length, 0),
@@ -259,7 +251,7 @@ export class ProjectService {
       tasksTermine: this.projects.reduce((sum, p) => 
         sum + p.tasks.filter(t => t.status === 'Terminé').length, 0),
       
-      // Priority statistics
+     
       hautePriorite: this.projects.reduce((sum, p) => 
         sum + p.tasks.filter(t => t.priority === 'Haute').length, 0),
       moyennePriorite: this.projects.reduce((sum, p) => 
@@ -270,7 +262,6 @@ export class ProjectService {
     return of(stats);
   }
 
-  // Get project progress (percentage of completed tasks)
   getProjectProgress(projectId: number): Observable<number> {
     const project = this.projects.find(p => p.id === projectId);
     if (!project || project.tasks.length === 0) return of(0);
@@ -280,14 +271,12 @@ export class ProjectService {
     return of(progress);
   }
 
-  // Get project completion percentage
+ 
   getProjectCompletion(projectId: number): Observable<number> {
     return this.getProjectProgress(projectId);
   }
 
-  // ============= SEARCH METHODS =============
-  
-  // Search projects by name or description
+ 
   searchProjects(searchTerm: string): Observable<Project[]> {
     const term = searchTerm.toLowerCase();
     const results = this.projects.filter(p => 
@@ -297,7 +286,7 @@ export class ProjectService {
     return of(results);
   }
 
-  // Search tasks across all projects
+ 
   searchTasks(searchTerm: string): Observable<Task[]> {
     const term = searchTerm.toLowerCase();
     const allTasks: Task[] = [];

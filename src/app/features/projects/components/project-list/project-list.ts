@@ -11,28 +11,30 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./project-list.css'],
 })
 export class ProjectListComponent implements OnInit {
-  // Data arrays
+  
   projects: Project[] = [];
   filteredProjects: Project[] = [];
 
-  // UI States
   loading = true;
   error = '';
 
-  // Modal states
   showProjectModal = false;
   showTaskModal = false;
   showDeleteConfirmModal = false;
+  showDetailsModal = false; 
 
-  // Editing states
+  
   editingProject: Project | null = null;
   editingTask: Task | null = null;
   selectedProjectId: number | null = null;
 
-  // Delete confirmation
+ 
+  selectedProject: Project | null = null;
+
+
   itemToDelete: { type: 'project' | 'task'; id: number; projectId?: number } | null = null;
 
-  // Forms
+  
   projectForm: Partial<Project> = {
     name: '',
     description: '',
@@ -48,11 +50,11 @@ export class ProjectListComponent implements OnInit {
     dueDate: new Date(),
   };
 
-  // Filters
+  
   filterStatus: string = 'Tous';
   searchTerm: string = '';
 
-  // Statistics
+ 
   stats: any = {};
 
   constructor(private projectService: ProjectService) {}
@@ -62,7 +64,7 @@ export class ProjectListComponent implements OnInit {
     this.loadStats();
   }
 
-  // ============= LOADING DATA =============
+ 
   loadProjects(): void {
     this.loading = true;
     this.projectService.getProjects().subscribe({
@@ -85,16 +87,17 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
-  // ============= FILTERS =============
+ 
   applyFilters(): void {
     let filtered = [...this.projects];
 
-    // Filter by status
+    console.log(this.searchTerm);
+    
     if (this.filterStatus !== 'Tous') {
       filtered = filtered.filter((p) => p.status === this.filterStatus);
     }
 
-    // Filter by search term
+   
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
       filtered = filtered.filter(
@@ -110,12 +113,11 @@ export class ProjectListComponent implements OnInit {
     this.applyFilters();
   }
 
-  onSearch(term: string): void {
-    this.searchTerm = term;
+  onSearch(): void {
     this.applyFilters();
   }
 
-  // ============= PROJECT CRUD =============
+  
   openAddProjectModal(): void {
     this.editingProject = null;
     this.projectForm = {
@@ -145,7 +147,7 @@ export class ProjectListComponent implements OnInit {
     }
 
     if (this.editingProject) {
-      // Update existing project
+     
       const updatedProject = {
         ...this.editingProject,
         ...this.projectForm,
@@ -162,7 +164,7 @@ export class ProjectListComponent implements OnInit {
         },
       });
     } else {
-      // Add new project
+      
       const newProject: Project = {
         name: this.projectForm.name || '',
         description: this.projectForm.description || '',
@@ -205,7 +207,22 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
-  // ============= TASK CRUD =============
+  openProjectDetailsModal(projectId: number): void {
+    const project = this.projects.find(p => p.id === projectId);
+    if (project) {
+      this.selectedProject = project;
+      this.showDetailsModal = true;
+    } else {
+      console.log(`Projet avec ID ${projectId} non trouvé`);
+    }
+  }
+
+  closeDetailsModal(): void {
+    this.showDetailsModal = false;
+    this.selectedProject = null;
+  }
+
+  
   openAddTaskModal(projectId: number): void {
     this.selectedProjectId = projectId;
     this.editingTask = null;
@@ -239,7 +256,7 @@ export class ProjectListComponent implements OnInit {
     }
 
     if (this.editingTask && this.selectedProjectId) {
-      // Update existing task
+    
       const updatedTask = {
         ...this.editingTask,
         ...this.taskForm,
@@ -255,7 +272,7 @@ export class ProjectListComponent implements OnInit {
         },
       });
     } else if (this.selectedProjectId) {
-      // Add new task
+      
       const newTask: Task = {
         title: this.taskForm.title || '',
         description: this.taskForm.description || '',
@@ -295,7 +312,7 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
-  // ============= TASK STATUS MANAGEMENT =============
+
   updateTaskStatus(
     projectId: number,
     task: Task,
@@ -326,7 +343,7 @@ export class ProjectListComponent implements OnInit {
     }
   }
 
-  // ============= DELETE CONFIRMATION =============
+
   confirmDelete(): void {
     if (this.itemToDelete?.type === 'project' && this.itemToDelete.id) {
       this.deleteProject(this.itemToDelete.id);
@@ -344,7 +361,7 @@ export class ProjectListComponent implements OnInit {
     this.showDeleteConfirmModal = false;
   }
 
-  // ============= UTILITY METHODS =============
+ 
   getProjectProgress(project: Project): number {
     if (!project.tasks || project.tasks.length === 0) return 0;
     const completedTasks = project.tasks.filter((t) => t.status === 'Terminé').length;
@@ -386,5 +403,15 @@ export class ProjectListComponent implements OnInit {
 
   countTasksByStatus(project: Project, status: string): number {
     return project.tasks?.filter((t) => t.status === status).length || 0;
+  }
+
+ 
+  formatDate(date: Date | undefined): string {
+    if (!date) return 'Non définie';
+    return new Date(date).toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 }
