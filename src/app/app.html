@@ -1,3 +1,54 @@
+<!-- src/app/app.html -->
+<div class="min-h-screen transition-colors duration-300"
+     [class.bg-gray-100]="currentTheme() === 'light'"
+     [class.bg-dark-100]="currentTheme() === 'dark'">
+  
+  <!-- Header with Theme Toggle -->
+  <header class="sticky top-0 z-50 shadow-md transition-colors duration-300"
+          [class.bg-white]="currentTheme() === 'light'"
+          [class.bg-dark-200]="currentTheme() === 'dark'"
+          [class.border-b]="true"
+          [class.border-gray-200]="currentTheme() === 'light'"
+          [class.border-gray-700]="currentTheme() === 'dark'">
+    
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex justify-between items-center">
+        <!-- Logo and Title -->
+        <div class="flex items-center gap-3">
+          <div class="text-2xl">📋</div>
+          <h1 class="text-xl font-bold transition-colors duration-300"
+              [class.text-gray-800]="currentTheme() === 'light'"
+              [class.text-white]="currentTheme() === 'dark'">
+            {{ title() }}
+          </h1>
+        </div>
 
-<app-project-list></app-project-list>
-<router-outlet />
+        <!-- Theme Toggle Button -->
+        <button (click)="toggleTheme()"
+                class="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 hover:scale-105"
+                [class.bg-gray-200]="currentTheme() === 'light'"
+                [class.bg-gray-700]="currentTheme() === 'dark'"
+                [class.text-gray-800]="currentTheme() === 'light'"
+                [class.text-white]="currentTheme() === 'dark'"
+                [class.hover:bg-gray-300]="currentTheme() === 'light'"
+                [class.hover:bg-gray-600]="currentTheme() === 'dark'">
+          <span class="text-xl">{{ getThemeIcon() }}</span>
+          <span class="text-sm font-medium">{{ getThemeText() }}</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-6">
+    <router-outlet />
+    <app-project-list />
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-auto py-4 text-center transition-colors duration-300"
+          [class.text-gray-600]="currentTheme() === 'light'"
+          [class.text-gray-400]="currentTheme() === 'dark'">
+    <p class="text-sm">© 2024 Project Manager - Tous droits réservés</p>
+  </footer>
+</div>

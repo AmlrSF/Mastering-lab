@@ -1,5 +1,6 @@
+// src/app/core/services/project.service.ts
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { Project, Task } from '../models/project.model';
 
 @Injectable({
@@ -7,7 +8,6 @@ import { Project, Task } from '../models/project.model';
 })
 export class ProjectService {
   
-  // Mock data respecting the schema
   private projects: Project[] = [
     {
       id: 1,
@@ -119,20 +119,28 @@ export class ProjectService {
     }
   ];
 
+  // Notification subject
+  private notificationSubject = new BehaviorSubject<{message: string, type: 'success' | 'error' | 'info'} | null>(null);
+  notifications$ = this.notificationSubject.asObservable();
+
   constructor() { }
 
- 
+  showNotification(message: string, type: 'success' | 'error' | 'info' = 'success') {
+    this.notificationSubject.next({ message, type });
+    setTimeout(() => {
+      this.notificationSubject.next(null);
+    }, 3000);
+  }
+
   getProjects(): Observable<Project[]> {
     return of(this.projects);
   }
 
-  
   getProjectById(id: number): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === id);
     return of(project);
   }
 
-  
   addProject(project: Project): Observable<Project> {
     const newId = Math.max(...this.projects.map(p => p.id || 0), 0) + 1;
     const newProject = { 
@@ -142,72 +150,73 @@ export class ProjectService {
       tasks: project.tasks || [] 
     };
     this.projects.push(newProject);
+    this.showNotification(`Projet "${newProject.name}" ajouté avec succès!`, 'success');
     return of(newProject);
   }
 
- 
   updateProject(updatedProject: Project): Observable<Project> {
     const index = this.projects.findIndex(p => p.id === updatedProject.id);
     if (index !== -1) {
       this.projects[index] = updatedProject;
+      this.showNotification(`Projet "${updatedProject.name}" mis à jour avec succès!`, 'success');
     }
     return of(updatedProject);
   }
 
- 
   deleteProject(id: number): Observable<boolean> {
     const index = this.projects.findIndex(p => p.id === id);
     if (index !== -1) {
+      const projectName = this.projects[index].name;
       this.projects.splice(index, 1);
+      this.showNotification(`Projet "${projectName}" supprimé avec succès!`, 'success');
       return of(true);
     }
     return of(false);
   }
 
-  
   getProjectsByStatus(status: 'En cours' | 'Terminé' | 'En pause'): Observable<Project[]> {
     const filteredProjects = this.projects.filter(p => p.status === status);
     return of(filteredProjects);
   }
 
-  
   addTask(projectId: number, task: Task): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === projectId);
     if (project) {
       const newTaskId = Math.max(...project.tasks.map(t => t.id || 0), 0) + 1;
       const newTask = { ...task, id: newTaskId };
       project.tasks.push(newTask);
+      this.showNotification(`Tâche "${newTask.title}" ajoutée au projet "${project.name}"!`, 'success');
     }
     return of(project);
   }
 
-  
   updateTask(projectId: number, updatedTask: Task): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === projectId);
     if (project) {
       const taskIndex = project.tasks.findIndex(t => t.id === updatedTask.id);
       if (taskIndex !== -1) {
         project.tasks[taskIndex] = updatedTask;
+        this.showNotification(`Tâche "${updatedTask.title}" mise à jour!`, 'success');
       }
     }
     return of(project);
   }
 
- 
   deleteTask(projectId: number, taskId: number): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === projectId);
     if (project) {
+      const task = project.tasks.find(t => t.id === taskId);
+      const taskTitle = task?.title || '';
       project.tasks = project.tasks.filter(t => t.id !== taskId);
+      this.showNotification(`Tâche "${taskTitle}" supprimée!`, 'success');
     }
     return of(project);
   }
 
- 
   getProjectTasks(projectId: number): Observable<Task[]> {
     const project = this.projects.find(p => p.id === projectId);
     return of(project?.tasks || []);
   }
-
 
   getTasksByStatus(projectId: number, status: 'En attente' | 'En cours' | 'Terminé'): Observable<Task[]> {
     const project = this.projects.find(p => p.id === projectId);
@@ -215,33 +224,30 @@ export class ProjectService {
     return of(filteredTasks);
   }
 
-  
   getTasksByPriority(projectId: number, priority: 'Haute' | 'Moyenne' | 'Basse'): Observable<Task[]> {
     const project = this.projects.find(p => p.id === projectId);
     const filteredTasks = project?.tasks.filter(t => t.priority === priority) || [];
     return of(filteredTasks);
   }
 
-  
   updateTaskStatus(projectId: number, taskId: number, status: 'En attente' | 'En cours' | 'Terminé'): Observable<Project | undefined> {
     const project = this.projects.find(p => p.id === projectId);
     if (project) {
       const task = project.tasks.find(t => t.id === taskId);
       if (task) {
         task.status = status;
+        this.showNotification(`Statut de la tâche "${task.title}" changé à ${status}!`, 'success');
       }
     }
     return of(project);
   }
 
-  
   getProjectStats(): Observable<any> {
     const stats = {
       total: this.projects.length,
       enCours: this.projects.filter(p => p.status === 'En cours').length,
       termine: this.projects.filter(p => p.status === 'Terminé').length,
       enPause: this.projects.filter(p => p.status === 'En pause').length,
-      
       
       totalTasks: this.projects.reduce((sum, p) => sum + p.tasks.length, 0),
       tasksEnAttente: this.projects.reduce((sum, p) => 
@@ -251,7 +257,6 @@ export class ProjectService {
       tasksTermine: this.projects.reduce((sum, p) => 
         sum + p.tasks.filter(t => t.status === 'Terminé').length, 0),
       
-     
       hautePriorite: this.projects.reduce((sum, p) => 
         sum + p.tasks.filter(t => t.priority === 'Haute').length, 0),
       moyennePriorite: this.projects.reduce((sum, p) => 
@@ -271,12 +276,10 @@ export class ProjectService {
     return of(progress);
   }
 
- 
   getProjectCompletion(projectId: number): Observable<number> {
     return this.getProjectProgress(projectId);
   }
 
- 
   searchProjects(searchTerm: string): Observable<Project[]> {
     const term = searchTerm.toLowerCase();
     const results = this.projects.filter(p => 
@@ -286,7 +289,6 @@ export class ProjectService {
     return of(results);
   }
 
- 
   searchTasks(searchTerm: string): Observable<Task[]> {
     const term = searchTerm.toLowerCase();
     const allTasks: Task[] = [];
@@ -301,5 +303,11 @@ export class ProjectService {
     });
     
     return of(allTasks);
+  }
+
+  getProjectProgressSync(project: Project): number {
+    if (!project.tasks || project.tasks.length === 0) return 0;
+    const completedTasks = project.tasks.filter(t => t.status === 'Terminé').length;
+    return Math.round((completedTasks / project.tasks.length) * 100);
   }
 }
