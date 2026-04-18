@@ -1,17 +1,12 @@
-<!-- src/app/features/projects/components/project-list/project-list.html -->
 <div class="p-4 max-w-6xl mx-auto relative">
 
   <!-- Notification Toast -->
   @if (notification) {
     <div [@notificationAnimation] class="fixed top-4 right-4 z-50">
       <div class="{{ getNotificationClass(notification.type) }} text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3">
-        @if (notification.type === 'success') {
-          <span class="text-xl">✅</span>
-        } @else if (notification.type === 'error') {
-          <span class="text-xl">❌</span>
-        } @else {
-          <span class="text-xl">ℹ️</span>
-        }
+        @if (notification.type === 'success') { <span class="text-xl">✅</span> }
+        @else if (notification.type === 'error') { <span class="text-xl">❌</span> }
+        @else { <span class="text-xl">ℹ️</span> }
         <span>{{ notification.message }}</span>
         <button (click)="notification = null" class="ml-4 hover:opacity-75">✕</button>
       </div>
@@ -36,9 +31,9 @@
     <!-- Search and Filter -->
     <div class="flex justify-between items-center gap-4 mb-4">
       <div class="flex-1">
-        <input type="text" 
-               (input)="onSearch()" 
-               placeholder="Rechercher un projet..." 
+        <input type="text"
+               (input)="onSearch()"
+               placeholder="Rechercher un projet..."
                [(ngModel)]="searchTerm"
                [class]="getInputClass()"
                class="w-full border rounded-lg px-4 py-2 transition-all focus:ring-2 focus:outline-none">
@@ -59,8 +54,8 @@
     </div>
   </div>
 
-  <!-- Loading State -->
-  @if(loading) {
+  <!-- Loading -->
+  @if (loading) {
     <div class="text-center py-8">
       <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
       <p class="mt-2"
@@ -71,16 +66,15 @@
     </div>
   }
 
-  <!-- Error State -->
-  @if(error) {
-    <div [@shakeAnimation] 
-         class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+  <!-- Error -->
+  @if (error) {
+    <div [@shakeAnimation] class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
       {{ error }}
     </div>
   }
 
-  <!-- Empty State -->
-  @if(!loading && filteredProjects.length === 0) {
+  <!-- Empty -->
+  @if (!loading && filteredProjects.length === 0) {
     <div class="text-center py-12 rounded-lg shadow"
          [class.bg-white]="currentTheme() === 'light'"
          [class.bg-dark-200]="currentTheme() === 'dark'">
@@ -97,15 +91,15 @@
     </div>
   }
 
-  <!-- Projects List -->
+  <!-- Projects list -->
   <div class="space-y-4">
-    @for(project of filteredProjects; track project.id) {
-      <div [@fadeSlideIn] 
+    @for (project of filteredProjects; track project.id) {
+      <div [@fadeSlideIn]
            class="rounded-lg p-6 transition-all duration-300 hover:shadow-xl shadow"
            [class.bg-white]="currentTheme() === 'light'"
            [class.bg-dark-200]="currentTheme() === 'dark'">
-        
-        <!-- Project Header -->
+
+        <!-- Project header -->
         <div class="flex justify-between items-start mb-4">
           <div class="flex-1">
             <div class="flex items-center gap-3 flex-wrap">
@@ -125,15 +119,13 @@
               {{ project.description }}
             </p>
 
-            <!-- Progress Bar -->
-            @if(project.tasks.length > 0) {
+            @if (project.tasks.length > 0) {
               <div class="mt-3 flex items-center gap-2">
                 <div class="w-48 h-2 rounded-full overflow-hidden"
                      [class.bg-gray-200]="currentTheme() === 'light'"
                      [class.bg-gray-700]="currentTheme() === 'dark'">
-                  <div class="h-full bg-green-500 rounded-full transition-all duration-500" 
-                       [style.width.%]="getProjectProgress(project)">
-                  </div>
+                  <div class="h-full bg-green-500 rounded-full transition-all duration-500"
+                       [style.width.%]="getProjectProgress(project)"></div>
                 </div>
                 <span class="text-sm"
                       [class.text-gray-600]="currentTheme() === 'light'"
@@ -144,47 +136,32 @@
             }
           </div>
 
-          <!-- Project Actions -->
           <div class="flex gap-2">
             <button (click)="openEditProjectModal(project)"
                     class="p-2 rounded-lg transition-colors"
                     [class.text-blue-600]="currentTheme() === 'light'"
                     [class.text-blue-400]="currentTheme() === 'dark'"
-                    [class.hover:bg-blue-50]="currentTheme() === 'light'"
-                    [class.hover:bg-blue-900]="currentTheme() === 'dark'"
-                    title="Modifier le projet">
-              ✏️
-            </button>
+                    title="Modifier le projet">✏️</button>
             <button (click)="confirmDeleteProject(project.id!)"
                     class="p-2 rounded-lg transition-colors"
                     [class.text-red-600]="currentTheme() === 'light'"
                     [class.text-red-400]="currentTheme() === 'dark'"
-                    [class.hover:bg-red-50]="currentTheme() === 'light'"
-                    [class.hover:bg-red-900]="currentTheme() === 'dark'"
-                    title="Supprimer le projet">
-              🗑️
-            </button>
+                    title="Supprimer le projet">🗑️</button>
             <button (click)="openProjectDetailsModal(project.id!)"
                     class="p-2 rounded-lg transition-colors"
                     [class.text-blue-600]="currentTheme() === 'light'"
                     [class.text-blue-400]="currentTheme() === 'dark'"
-                    [class.hover:bg-blue-50]="currentTheme() === 'light'"
-                    [class.hover:bg-blue-900]="currentTheme() === 'dark'"
-                    title="Voir les détails">
-              👀
-            </button>
+                    title="Voir les détails">👀</button>
           </div>
         </div>
 
-        <!-- Tasks Section -->
+        <!-- Tasks section -->
         <div class="mt-4">
           <div class="flex justify-between items-center mb-3">
             <div class="flex items-center gap-3">
               <h3 class="text-lg font-semibold"
                   [class.text-gray-700]="currentTheme() === 'light'"
-                  [class.text-gray-300]="currentTheme() === 'dark'">
-                Tâches
-              </h3>
+                  [class.text-gray-300]="currentTheme() === 'dark'">Tâches</h3>
               <span class="text-sm"
                     [class.text-gray-500]="currentTheme() === 'light'"
                     [class.text-gray-400]="currentTheme() === 'dark'">
@@ -198,7 +175,7 @@
             </button>
           </div>
 
-          @if(project.tasks.length === 0) {
+          @if (project.tasks.length === 0) {
             <p class="text-center py-4 rounded-lg"
                [class.text-gray-500]="currentTheme() === 'light'"
                [class.text-gray-400]="currentTheme() === 'dark'"
@@ -209,8 +186,8 @@
           }
 
           <div class="space-y-2">
-            @for(task of project.tasks; track task.id) {
-              <div [@fadeSlideIn] 
+            @for (task of project.tasks; track task.id) {
+              <div [@fadeSlideIn]
                    [class.shake]="animatedItemId === task.id"
                    class="border-l-4 p-4 rounded-r-lg transition-all duration-300 hover:shadow-md"
                    [class]="getTaskStatusClass(task.status)">
@@ -227,7 +204,7 @@
                         {{ task.priority }}
                       </span>
                     </div>
-                    @if(task.description) {
+                    @if (task.description) {
                       <p class="text-sm mt-1"
                          [class.text-gray-600]="currentTheme() === 'light'"
                          [class.text-gray-400]="currentTheme() === 'dark'">
@@ -236,53 +213,32 @@
                     }
                   </div>
 
-                  <!-- Task Actions -->
                   <div class="flex gap-2 ml-4">
                     <button (click)="updateTaskStatus(project.id!, task, 'En attente')"
                             class="px-2 py-1 text-xs rounded transition-all hover:scale-105"
                             [class.bg-yellow-200]="task.status === 'En attente' && currentTheme() === 'light'"
                             [class.bg-yellow-800]="task.status === 'En attente' && currentTheme() === 'dark'"
-                            [class.text-yellow-800]="task.status === 'En attente' && currentTheme() === 'light'"
-                            [class.text-yellow-200]="task.status === 'En attente' && currentTheme() === 'dark'"
-                            title="Changer statut">
-                      ⏳
-                    </button>
+                            title="En attente">⏳</button>
                     <button (click)="updateTaskStatus(project.id!, task, 'En cours')"
                             class="px-2 py-1 text-xs rounded transition-all hover:scale-105"
                             [class.bg-blue-200]="task.status === 'En cours' && currentTheme() === 'light'"
                             [class.bg-blue-800]="task.status === 'En cours' && currentTheme() === 'dark'"
-                            [class.text-blue-800]="task.status === 'En cours' && currentTheme() === 'light'"
-                            [class.text-blue-200]="task.status === 'En cours' && currentTheme() === 'dark'"
-                            title="Changer statut">
-                      🔄
-                    </button>
+                            title="En cours">🔄</button>
                     <button (click)="updateTaskStatus(project.id!, task, 'Terminé')"
                             class="px-2 py-1 text-xs rounded transition-all hover:scale-105"
                             [class.bg-green-200]="task.status === 'Terminé' && currentTheme() === 'light'"
                             [class.bg-green-800]="task.status === 'Terminé' && currentTheme() === 'dark'"
-                            [class.text-green-800]="task.status === 'Terminé' && currentTheme() === 'light'"
-                            [class.text-green-200]="task.status === 'Terminé' && currentTheme() === 'dark'"
-                            title="Changer statut">
-                      ✅
-                    </button>
+                            title="Terminé">✅</button>
                     <button (click)="editTask(project.id!, task)"
                             class="p-1 rounded transition-colors"
                             [class.text-blue-600]="currentTheme() === 'light'"
                             [class.text-blue-400]="currentTheme() === 'dark'"
-                            [class.hover:bg-blue-100]="currentTheme() === 'light'"
-                            [class.hover:bg-blue-900]="currentTheme() === 'dark'"
-                            title="Modifier">
-                      ✏️
-                    </button>
+                            title="Modifier">✏️</button>
                     <button (click)="confirmDeleteTask(project.id!, task.id!)"
                             class="p-1 rounded transition-colors"
                             [class.text-red-600]="currentTheme() === 'light'"
                             [class.text-red-400]="currentTheme() === 'dark'"
-                            [class.hover:bg-red-100]="currentTheme() === 'light'"
-                            [class.hover:bg-red-900]="currentTheme() === 'dark'"
-                            title="Supprimer">
-                      🗑️
-                    </button>
+                            title="Supprimer">🗑️</button>
                   </div>
                 </div>
               </div>
@@ -294,51 +250,65 @@
   </div>
 </div>
 
-<!-- Project Modal -->
-@if(showProjectModal) {
+<!-- ═══════════════════════════════════════════════ PROJECT MODAL -->
+@if (showProjectModal) {
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" [@fadeSlideIn]>
     <div class="rounded-lg p-6 max-w-md w-full"
          [class.bg-white]="currentTheme() === 'light'"
          [class.bg-dark-200]="currentTheme() === 'dark'">
+
       <h3 class="text-lg font-semibold mb-4"
           [class.text-gray-800]="currentTheme() === 'light'"
           [class.text-white]="currentTheme() === 'dark'">
         {{ editingProject ? 'Modifier' : 'Nouveau' }} Projet
       </h3>
 
-      <div class="space-y-4">
+      <form [formGroup]="projectModalForm" (ngSubmit)="saveProject()" class="space-y-4">
+
+        <!-- Nom -->
         <div>
           <label class="block text-sm font-medium mb-1"
                  [class.text-gray-700]="currentTheme() === 'light'"
                  [class.text-gray-300]="currentTheme() === 'dark'">
-            Nom *
+            Nom <span class="text-red-500">*</span>
           </label>
-          <input [(ngModel)]="projectForm.name" 
-                 [class]="getInputClass()"
+          <input formControlName="name"
+                 [class]="getInputClass() + ' ' + getControlClass(pName)"
                  class="w-full border rounded-lg p-2 transition-all focus:ring-2 focus:outline-none"
                  placeholder="Nom du projet">
+          @if (pName?.invalid && pName?.touched) {
+            <p class="mt-1 text-xs text-red-500">{{ getFieldError(pName, 'Le nom') }}</p>
+          }
         </div>
 
+        <!-- Description -->
         <div>
           <label class="block text-sm font-medium mb-1"
                  [class.text-gray-700]="currentTheme() === 'light'"
                  [class.text-gray-300]="currentTheme() === 'dark'">
-            Description *
+            Description <span class="text-red-500">*</span>
           </label>
-          <textarea [(ngModel)]="projectForm.description" 
-                    [class]="getInputClass()"
+          <textarea formControlName="description"
+                    [class]="getInputClass() + ' ' + getControlClass(pDescription)"
                     class="w-full border rounded-lg p-2 transition-all focus:ring-2 focus:outline-none"
                     rows="3"
                     placeholder="Description du projet"></textarea>
+          @if (pDescription?.invalid && pDescription?.touched) {
+            <p class="mt-1 text-xs text-red-500">{{ getFieldError(pDescription, 'La description') }}</p>
+          }
+          <p class="mt-1 text-xs text-right"
+             [class.text-gray-400]="currentTheme() === 'light'"
+             [class.text-gray-500]="currentTheme() === 'dark'">
+            {{ pDescription?.value?.length || 0 }}/500
+          </p>
         </div>
 
+        <!-- Statut -->
         <div>
           <label class="block text-sm font-medium mb-1"
                  [class.text-gray-700]="currentTheme() === 'light'"
-                 [class.text-gray-300]="currentTheme() === 'dark'">
-            Statut
-          </label>
-          <select [(ngModel)]="projectForm.status" 
+                 [class.text-gray-300]="currentTheme() === 'dark'">Statut</label>
+          <select formControlName="status"
                   [class]="getInputClass()"
                   class="w-full border rounded-lg p-2 transition-all focus:ring-2 focus:outline-none">
             <option value="En cours">En cours</option>
@@ -346,70 +316,89 @@
             <option value="En pause">En pause</option>
           </select>
         </div>
-      </div>
 
-      <div class="flex justify-end gap-2 mt-6">
-        <button (click)="closeProjectModal()"
-                [class]="getButtonClass('secondary')"
-                class="px-4 py-2 rounded-lg transition-colors">
-          Annuler
-        </button>
-        <button (click)="saveProject()"
-                [class]="getButtonClass('primary')"
-                class="px-4 py-2 rounded-lg transition-colors">
-          {{ editingProject ? 'Modifier' : 'Créer' }}
-        </button>
-      </div>
+        @if (projectModalForm.invalid && projectModalForm.touched) {
+          <p class="text-xs text-red-500 bg-red-50 border border-red-200 rounded p-2">
+            ⚠️ Veuillez corriger les erreurs avant de continuer.
+          </p>
+        }
+
+        <div class="flex justify-end gap-2 mt-6">
+          <button type="button" (click)="closeProjectModal()"
+                  [class]="getButtonClass('secondary')"
+                  class="px-4 py-2 rounded-lg transition-colors">Annuler</button>
+          <button type="submit"
+                  [disabled]="projectModalForm.invalid"
+                  [class]="getButtonClass('primary')"
+                  class="px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            {{ editingProject ? 'Modifier' : 'Créer' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 }
 
-<!-- Task Modal -->
-@if(showTaskModal) {
+<!-- ═══════════════════════════════════════════════ TASK MODAL -->
+@if (showTaskModal) {
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" [@fadeSlideIn]>
     <div class="rounded-lg p-6 max-w-md w-full"
          [class.bg-white]="currentTheme() === 'light'"
          [class.bg-dark-200]="currentTheme() === 'dark'">
+
       <h3 class="text-lg font-semibold mb-4"
           [class.text-gray-800]="currentTheme() === 'light'"
           [class.text-white]="currentTheme() === 'dark'">
         {{ editingTask ? 'Modifier' : 'Nouvelle' }} Tâche
       </h3>
 
-      <div class="space-y-4">
+      <form [formGroup]="taskModalForm" (ngSubmit)="saveTask()" class="space-y-4">
+
+        <!-- Titre -->
         <div>
           <label class="block text-sm font-medium mb-1"
                  [class.text-gray-700]="currentTheme() === 'light'"
                  [class.text-gray-300]="currentTheme() === 'dark'">
-            Titre *
+            Titre <span class="text-red-500">*</span>
           </label>
-          <input [(ngModel)]="taskForm.title" 
-                 [class]="getInputClass()"
+          <input formControlName="title"
+                 [class]="getInputClass() + ' ' + getControlClass(tTitle)"
                  class="w-full border rounded-lg p-2 transition-all focus:ring-2 focus:outline-none"
                  placeholder="Titre de la tâche">
+          @if (tTitle?.invalid && tTitle?.touched) {
+            <p class="mt-1 text-xs text-red-500">{{ getFieldError(tTitle, 'Le titre') }}</p>
+          }
         </div>
 
+        <!-- Description -->
         <div>
           <label class="block text-sm font-medium mb-1"
                  [class.text-gray-700]="currentTheme() === 'light'"
-                 [class.text-gray-300]="currentTheme() === 'dark'">
-            Description
-          </label>
-          <textarea [(ngModel)]="taskForm.description" 
-                    [class]="getInputClass()"
+                 [class.text-gray-300]="currentTheme() === 'dark'">Description</label>
+          <textarea formControlName="description"
+                    [class]="getInputClass() + ' ' + getControlClass(tDescription)"
                     class="w-full border rounded-lg p-2 transition-all focus:ring-2 focus:outline-none"
                     rows="2"
                     placeholder="Description de la tâche"></textarea>
+          @if (tDescription?.invalid && tDescription?.touched) {
+            <p class="mt-1 text-xs text-red-500">{{ getFieldError(tDescription, 'La description') }}</p>
+          }
+          <p class="mt-1 text-xs text-right"
+             [class.text-gray-400]="currentTheme() === 'light'"
+             [class.text-gray-500]="currentTheme() === 'dark'">
+            {{ tDescription?.value?.length || 0 }}/500
+          </p>
         </div>
 
+        <!-- Priorité & Statut -->
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-sm font-medium mb-1"
                    [class.text-gray-700]="currentTheme() === 'light'"
                    [class.text-gray-300]="currentTheme() === 'dark'">
-              Priorité
+              Priorité <span class="text-red-500">*</span>
             </label>
-            <select [(ngModel)]="taskForm.priority" 
+            <select formControlName="priority"
                     [class]="getInputClass()"
                     class="w-full border rounded-lg p-2 transition-all focus:ring-2 focus:outline-none">
               <option value="Haute">Haute</option>
@@ -417,14 +406,13 @@
               <option value="Basse">Basse</option>
             </select>
           </div>
-
           <div>
             <label class="block text-sm font-medium mb-1"
                    [class.text-gray-700]="currentTheme() === 'light'"
                    [class.text-gray-300]="currentTheme() === 'dark'">
-              Statut
+              Statut <span class="text-red-500">*</span>
             </label>
-            <select [(ngModel)]="taskForm.status" 
+            <select formControlName="status"
                     [class]="getInputClass()"
                     class="w-full border rounded-lg p-2 transition-all focus:ring-2 focus:outline-none">
               <option value="En attente">En attente</option>
@@ -434,88 +422,85 @@
           </div>
         </div>
 
+        <!-- Date d'échéance -->
         <div>
           <label class="block text-sm font-medium mb-1"
                  [class.text-gray-700]="currentTheme() === 'light'"
-                 [class.text-gray-300]="currentTheme() === 'dark'">
-            Date d'échéance
-          </label>
-          <input type="date" [(ngModel)]="taskForm.dueDate" 
+                 [class.text-gray-300]="currentTheme() === 'dark'">Date d'échéance</label>
+          <input type="date"
+                 formControlName="dueDate"
                  [class]="getInputClass()"
                  class="w-full border rounded-lg p-2 transition-all focus:ring-2 focus:outline-none">
         </div>
-      </div>
 
-      <div class="flex justify-end gap-2 mt-6">
-        <button (click)="closeTaskModal()"
-                [class]="getButtonClass('secondary')"
-                class="px-4 py-2 rounded-lg transition-colors">
-          Annuler
-        </button>
-        <button (click)="saveTask()"
-                [class]="getButtonClass('primary')"
-                class="px-4 py-2 rounded-lg transition-colors">
-          {{ editingTask ? 'Modifier' : 'Ajouter' }}
-        </button>
-      </div>
+        @if (taskModalForm.invalid && taskModalForm.touched) {
+          <p class="text-xs text-red-500 bg-red-50 border border-red-200 rounded p-2">
+            ⚠️ Veuillez corriger les erreurs avant de continuer.
+          </p>
+        }
+
+        <div class="flex justify-end gap-2 mt-6">
+          <button type="button" (click)="closeTaskModal()"
+                  [class]="getButtonClass('secondary')"
+                  class="px-4 py-2 rounded-lg transition-colors">Annuler</button>
+          <button type="submit"
+                  [disabled]="taskModalForm.invalid"
+                  [class]="getButtonClass('primary')"
+                  class="px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            {{ editingTask ? 'Modifier' : 'Ajouter' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 }
 
-<!-- Delete Confirmation Modal -->
-@if(showDeleteConfirmModal) {
+<!-- ═══════════════════════════════════════════════ DELETE MODAL -->
+@if (showDeleteConfirmModal) {
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" [@fadeSlideIn]>
     <div class="rounded-lg p-6 max-w-md w-full"
          [class.bg-white]="currentTheme() === 'light'"
          [class.bg-dark-200]="currentTheme() === 'dark'">
       <h3 class="text-lg font-semibold mb-4 text-red-600">Confirmer la suppression</h3>
-
       <p class="mb-6"
          [class.text-gray-700]="currentTheme() === 'light'"
          [class.text-gray-300]="currentTheme() === 'dark'">
-        Êtes-vous sûr de vouloir supprimer ce {{ itemToDelete?.type === 'project' ? 'projet' : 'tâche' }} ?
+        Êtes-vous sûr de vouloir supprimer ce
+        {{ itemToDelete?.type === 'project' ? 'projet' : 'tâche' }} ?
         Cette action est irréversible.
       </p>
-
       <div class="flex justify-end gap-2">
         <button (click)="cancelDelete()"
                 [class]="getButtonClass('secondary')"
-                class="px-4 py-2 rounded-lg transition-colors">
-          Annuler
-        </button>
+                class="px-4 py-2 rounded-lg transition-colors">Annuler</button>
         <button (click)="confirmDelete()"
                 [class]="getButtonClass('danger')"
-                class="px-4 py-2 rounded-lg transition-colors">
-          Supprimer
-        </button>
+                class="px-4 py-2 rounded-lg transition-colors">Supprimer</button>
       </div>
     </div>
   </div>
 }
 
-<!-- Details Modal -->
-@if(showDetailsModal && selectedProject) {
+<!-- ═══════════════════════════════════════════════ DETAILS MODAL -->
+@if (showDetailsModal && selectedProject) {
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" [@fadeSlideIn]>
     <div class="rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
          [class.bg-white]="currentTheme() === 'light'"
          [class.bg-dark-200]="currentTheme() === 'dark'">
+
       <div class="flex justify-between items-start mb-4">
         <h3 class="text-xl font-bold"
             [class.text-gray-800]="currentTheme() === 'light'"
             [class.text-white]="currentTheme() === 'dark'">
           Détails du projet
         </h3>
-        <button (click)="closeDetailsModal()" 
-                class="text-2xl"
+        <button (click)="closeDetailsModal()" class="text-2xl"
                 [class.text-gray-500]="currentTheme() === 'light'"
-                [class.text-gray-400]="currentTheme() === 'dark'"
-                [class.hover:text-gray-700]="currentTheme() === 'light'"
-                [class.hover:text-gray-300]="currentTheme() === 'dark'">
-          &times;
-        </button>
+                [class.text-gray-400]="currentTheme() === 'dark'">&times;</button>
       </div>
 
       <div class="space-y-4">
+        <!-- General info -->
         <div class="p-4 rounded-lg"
              [class.bg-gray-50]="currentTheme() === 'light'"
              [class.bg-dark-100]="currentTheme() === 'dark'">
@@ -528,21 +513,15 @@
             <div>
               <p class="text-sm"
                  [class.text-gray-500]="currentTheme() === 'light'"
-                 [class.text-gray-400]="currentTheme() === 'dark'">
-                Nom
-              </p>
+                 [class.text-gray-400]="currentTheme() === 'dark'">Nom</p>
               <p class="font-medium"
                  [class.text-gray-800]="currentTheme() === 'light'"
-                 [class.text-gray-200]="currentTheme() === 'dark'">
-                {{ selectedProject.name }}
-              </p>
+                 [class.text-gray-200]="currentTheme() === 'dark'">{{ selectedProject.name }}</p>
             </div>
             <div>
               <p class="text-sm"
                  [class.text-gray-500]="currentTheme() === 'light'"
-                 [class.text-gray-400]="currentTheme() === 'dark'">
-                Statut
-              </p>
+                 [class.text-gray-400]="currentTheme() === 'dark'">Statut</p>
               <span class="px-2 py-1 text-xs font-semibold rounded-full inline-block"
                     [class]="getStatusBadgeClass(selectedProject.status)">
                 {{ selectedProject.status }}
@@ -551,9 +530,7 @@
             <div class="col-span-2">
               <p class="text-sm"
                  [class.text-gray-500]="currentTheme() === 'light'"
-                 [class.text-gray-400]="currentTheme() === 'dark'">
-                Description
-              </p>
+                 [class.text-gray-400]="currentTheme() === 'dark'">Description</p>
               <p class="mt-1"
                  [class.text-gray-700]="currentTheme() === 'light'"
                  [class.text-gray-300]="currentTheme() === 'dark'">
@@ -563,6 +540,7 @@
           </div>
         </div>
 
+        <!-- Task stats -->
         <div class="p-4 rounded-lg"
              [class.bg-gray-50]="currentTheme() === 'light'"
              [class.bg-dark-100]="currentTheme() === 'dark'">
@@ -575,32 +553,32 @@
             <div class="p-3 rounded-lg shadow-sm"
                  [class.bg-white]="currentTheme() === 'light'"
                  [class.bg-dark-200]="currentTheme() === 'dark'">
-              <p class="text-2xl font-bold text-yellow-600">{{ countTasksByStatus(selectedProject, 'En attente') }}</p>
+              <p class="text-2xl font-bold text-yellow-600">
+                {{ countTasksByStatus(selectedProject, 'En attente') }}
+              </p>
               <p class="text-sm"
                  [class.text-gray-600]="currentTheme() === 'light'"
-                 [class.text-gray-400]="currentTheme() === 'dark'">
-                En attente
-              </p>
+                 [class.text-gray-400]="currentTheme() === 'dark'">En attente</p>
             </div>
             <div class="p-3 rounded-lg shadow-sm"
                  [class.bg-white]="currentTheme() === 'light'"
                  [class.bg-dark-200]="currentTheme() === 'dark'">
-              <p class="text-2xl font-bold text-blue-600">{{ countTasksByStatus(selectedProject, 'En cours') }}</p>
+              <p class="text-2xl font-bold text-blue-600">
+                {{ countTasksByStatus(selectedProject, 'En cours') }}
+              </p>
               <p class="text-sm"
                  [class.text-gray-600]="currentTheme() === 'light'"
-                 [class.text-gray-400]="currentTheme() === 'dark'">
-                En cours
-              </p>
+                 [class.text-gray-400]="currentTheme() === 'dark'">En cours</p>
             </div>
             <div class="p-3 rounded-lg shadow-sm"
                  [class.bg-white]="currentTheme() === 'light'"
                  [class.bg-dark-200]="currentTheme() === 'dark'">
-              <p class="text-2xl font-bold text-green-600">{{ countTasksByStatus(selectedProject, 'Terminé') }}</p>
+              <p class="text-2xl font-bold text-green-600">
+                {{ countTasksByStatus(selectedProject, 'Terminé') }}
+              </p>
               <p class="text-sm"
                  [class.text-gray-600]="currentTheme() === 'light'"
-                 [class.text-gray-400]="currentTheme() === 'dark'">
-                Terminé
-              </p>
+                 [class.text-gray-400]="currentTheme() === 'dark'">Terminé</p>
             </div>
           </div>
         </div>
@@ -609,9 +587,7 @@
       <div class="flex justify-end mt-6">
         <button (click)="closeDetailsModal()"
                 [class]="getButtonClass('primary')"
-                class="px-4 py-2 rounded-lg transition-colors">
-          Fermer
-        </button>
+                class="px-4 py-2 rounded-lg transition-colors">Fermer</button>
       </div>
     </div>
   </div>

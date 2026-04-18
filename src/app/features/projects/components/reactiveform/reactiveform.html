@@ -1,0 +1,884 @@
+<div class="min-h-screen bg-gray-50">
+
+  <!-- ── Top Nav ───────────────────────────────────────────────── -->
+  <div class="bg-white border-b border-gray-200 sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto px-4 py-3">
+      <h1 class="text-lg font-bold text-indigo-700 mb-3">TP5 — Reactive Forms Angular</h1>
+      <div class="flex flex-wrap gap-2 text-xs font-semibold">
+
+        <button (click)="setSection('p1-basic')"
+                class="px-3 py-1.5 rounded-full border transition-colors"
+                [class.bg-indigo-600]="activeSection === 'p1-basic'"
+                [class.text-white]="activeSection === 'p1-basic'"
+                [class.border-indigo-600]="activeSection === 'p1-basic'"
+                [class.border-gray-300]="activeSection !== 'p1-basic'"
+                [class.text-gray-600]="activeSection !== 'p1-basic'">
+          P1Q1 — Basic
+        </button>
+
+        <button (click)="setSection('p1-contact')"
+                class="px-3 py-1.5 rounded-full border transition-colors"
+                [class.bg-indigo-600]="activeSection === 'p1-contact'"
+                [class.text-white]="activeSection === 'p1-contact'"
+                [class.border-indigo-600]="activeSection === 'p1-contact'"
+                [class.border-gray-300]="activeSection !== 'p1-contact'"
+                [class.text-gray-600]="activeSection !== 'p1-contact'">
+          P1Q3 — Contact
+        </button>
+
+        <button (click)="setSection('p2-password')"
+                class="px-3 py-1.5 rounded-full border transition-colors"
+                [class.bg-indigo-600]="activeSection === 'p2-password'"
+                [class.text-white]="activeSection === 'p2-password'"
+                [class.border-indigo-600]="activeSection === 'p2-password'"
+                [class.border-gray-300]="activeSection !== 'p2-password'"
+                [class.text-gray-600]="activeSection !== 'p2-password'">
+          P2Q1 — Password
+        </button>
+
+        <button (click)="setSection('p2-async')"
+                class="px-3 py-1.5 rounded-full border transition-colors"
+                [class.bg-indigo-600]="activeSection === 'p2-async'"
+                [class.text-white]="activeSection === 'p2-async'"
+                [class.border-indigo-600]="activeSection === 'p2-async'"
+                [class.border-gray-300]="activeSection !== 'p2-async'"
+                [class.text-gray-600]="activeSection !== 'p2-async'">
+          P2Q2 — Async
+        </button>
+
+        <button (click)="setSection('p3-builder')"
+                class="px-3 py-1.5 rounded-full border transition-colors"
+                [class.bg-indigo-600]="activeSection === 'p3-builder'"
+                [class.text-white]="activeSection === 'p3-builder'"
+                [class.border-indigo-600]="activeSection === 'p3-builder'"
+                [class.border-gray-300]="activeSection !== 'p3-builder'"
+                [class.text-gray-600]="activeSection !== 'p3-builder'">
+          P3 — FormBuilder
+        </button>
+
+        <button (click)="setSection('p4-emails')"
+                class="px-3 py-1.5 rounded-full border transition-colors"
+                [class.bg-indigo-600]="activeSection === 'p4-emails'"
+                [class.text-white]="activeSection === 'p4-emails'"
+                [class.border-indigo-600]="activeSection === 'p4-emails'"
+                [class.border-gray-300]="activeSection !== 'p4-emails'"
+                [class.text-gray-600]="activeSection !== 'p4-emails'">
+          P4Q1 — Emails
+        </button>
+
+        <button (click)="setSection('p4-competences')"
+                class="px-3 py-1.5 rounded-full border transition-colors"
+                [class.bg-indigo-600]="activeSection === 'p4-competences'"
+                [class.text-white]="activeSection === 'p4-competences'"
+                [class.border-indigo-600]="activeSection === 'p4-competences'"
+                [class.border-gray-300]="activeSection !== 'p4-competences'"
+                [class.text-gray-600]="activeSection !== 'p4-competences'">
+          P4Q2 — Compétences
+        </button>
+
+        <button (click)="setSection('p5-address')"
+                class="px-3 py-1.5 rounded-full border transition-colors"
+                [class.bg-indigo-600]="activeSection === 'p5-address'"
+                [class.text-white]="activeSection === 'p5-address'"
+                [class.border-indigo-600]="activeSection === 'p5-address'"
+                [class.border-gray-300]="activeSection !== 'p5-address'"
+                [class.text-gray-600]="activeSection !== 'p5-address'">
+          P5Q1 — Adresse
+        </button>
+
+        <button (click)="setSection('p5-multi-address')"
+                class="px-3 py-1.5 rounded-full border transition-colors"
+                [class.bg-indigo-600]="activeSection === 'p5-multi-address'"
+                [class.text-white]="activeSection === 'p5-multi-address'"
+                [class.border-indigo-600]="activeSection === 'p5-multi-address'"
+                [class.border-gray-300]="activeSection !== 'p5-multi-address'"
+                [class.text-gray-600]="activeSection !== 'p5-multi-address'">
+          P5Q2 — Multi-adresses
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 py-8">
+
+    <!-- ══════════════════════════════════════════════════════════
+         P1 Q1 — Basic email form
+    ══════════════════════════════════════════════════════════════ -->
+    @if (activeSection === 'p1-basic') {
+      <div class="max-w-lg mx-auto">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-base font-bold text-gray-800 mb-1">Partie 1 Q1 — Premier formulaire réactif</h2>
+          <p class="text-xs text-gray-500 mb-5">FormGroup + FormControl + validation email + pipe json</p>
+
+          <form [formGroup]="basicForm" (ngSubmit)="onBasicSubmit()">
+
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-gray-600 mb-1">
+                Adresse email <span class="text-red-500">*</span>
+              </label>
+              <input type="email"
+                     formControlName="email"
+                     placeholder="exemple@domaine.com"
+                     class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                     [class]="inputClass(basicEmail)">
+
+              @if (basicEmail?.invalid && basicEmail?.touched) {
+                <div class="mt-1 space-y-0.5">
+                  @if (basicEmail?.errors?.['required']) {
+                    <p class="text-xs text-red-600">L'email est obligatoire.</p>
+                  }
+                  @if (basicEmail?.errors?.['email']) {
+                    <p class="text-xs text-red-600">Format email invalide.</p>
+                  }
+                </div>
+              }
+            </div>
+
+            <button type="submit"
+                    [disabled]="basicForm.invalid"
+                    class="w-full py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white
+                           hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Soumettre
+            </button>
+          </form>
+
+          <!-- Pipe json -->
+          <div class="mt-5">
+            <p class="text-xs font-semibold text-gray-500 mb-1">Valeur du formulaire (json pipe) :</p>
+            <pre class="text-xs bg-gray-50 border border-gray-200 rounded-lg p-3 font-mono text-gray-600">{{ basicForm.value | json }}</pre>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════
+         P1 Q3 — Contact form
+    ══════════════════════════════════════════════════════════════ -->
+    @if (activeSection === 'p1-contact') {
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-base font-bold text-gray-800 mb-1">Partie 1 Q3 — Formulaire de contact</h2>
+          <p class="text-xs text-gray-500 mb-5">nom, prénom, email, téléphone (pattern), message + getters</p>
+
+          <form [formGroup]="contactForm" (ngSubmit)="onContactSubmit()" class="space-y-4">
+
+            <div class="grid grid-cols-2 gap-4">
+              <!-- Nom -->
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Nom *</label>
+                <input type="text" formControlName="nom" placeholder="Dupont"
+                       class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                       [class]="inputClass(cNom, contactSubmitted)">
+                @if (errMsg(cNom)) {
+                  <p class="text-xs text-red-600 mt-0.5">{{ errMsg(cNom) }}</p>
+                }
+              </div>
+
+              <!-- Prénom -->
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Prénom *</label>
+                <input type="text" formControlName="prenom" placeholder="Jean"
+                       class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                       [class]="inputClass(cPrenom, contactSubmitted)">
+                @if (errMsg(cPrenom)) {
+                  <p class="text-xs text-red-600 mt-0.5">{{ errMsg(cPrenom) }}</p>
+                }
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Email *</label>
+              <input type="email" formControlName="email" placeholder="jean@exemple.com"
+                     class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                     [class]="inputClass(cEmail, contactSubmitted)">
+              @if (errMsg(cEmail)) {
+                <p class="text-xs text-red-600 mt-0.5">{{ errMsg(cEmail) }}</p>
+              }
+            </div>
+
+            <!-- Téléphone -->
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">
+                Téléphone <span class="text-gray-400">(optionnel)</span>
+              </label>
+              <input type="tel" formControlName="telephone" placeholder="0612345678"
+                     class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                     [class]="inputClass(cTelephone, contactSubmitted)">
+              @if (cTelephone?.touched && cTelephone?.errors?.['pattern']) {
+                <p class="text-xs text-red-600 mt-0.5">Format français invalide (ex: 0612345678).</p>
+              }
+            </div>
+
+            <!-- Message -->
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Message *</label>
+              <textarea formControlName="message" rows="4" placeholder="Votre message (min 10 caractères)..."
+                        class="w-full px-3 py-2 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                        [class]="inputClass(cMessage, contactSubmitted)"></textarea>
+              @if (errMsg(cMessage)) {
+                <p class="text-xs text-red-600 mt-0.5">{{ errMsg(cMessage) }}</p>
+              }
+              <p class="text-xs text-gray-400 text-right mt-0.5">
+                {{ cMessage?.value?.length || 0 }} / min 10
+              </p>
+            </div>
+
+            <button type="submit"
+                    [disabled]="contactForm.invalid"
+                    class="w-full py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white
+                           hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Envoyer le message
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════
+         P2 Q1 — Password strength
+    ══════════════════════════════════════════════════════════════ -->
+    @if (activeSection === 'p2-password') {
+      <div class="max-w-lg mx-auto">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-base font-bold text-gray-800 mb-1">Partie 2 Q1 — Validateur personnalisé</h2>
+          <p class="text-xs text-gray-500 mb-5">passwordStrengthValidator + matchPasswordValidator au niveau FormGroup</p>
+
+          <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()" class="space-y-4">
+
+            <!-- Password -->
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Mot de passe *</label>
+              <div class="relative">
+                <input [type]="showPassword ? 'text' : 'password'"
+                       formControlName="password"
+                       placeholder="Min 8 caractères..."
+                       class="w-full h-10 px-3 pr-10 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                       [class]="inputClass(pPassword, passwordSubmitted)">
+                <button type="button" (click)="showPassword = !showPassword"
+                        class="absolute right-3 top-2.5 text-gray-400 text-xs">
+                  {{ showPassword ? 'Masquer' : 'Afficher' }}
+                </button>
+              </div>
+
+              <!-- Strength checklist -->
+              @if (pPassword?.dirty || passwordSubmitted) {
+                <div class="mt-2 grid grid-cols-2 gap-1">
+                  @for (item of [
+                    { key: 'uppercase', label: 'Majuscule' },
+                    { key: 'lowercase', label: 'Minuscule' },
+                    { key: 'number',    label: 'Chiffre' },
+                    { key: 'special',   label: 'Spécial (!@#...)' },
+                    { key: 'length',    label: '8 caractères min' }
+                  ]; track item.key) {
+                    <div class="flex items-center gap-1.5 text-xs"
+                         [class.text-green-600]="passwordChecks[item.key]"
+                         [class.text-red-500]="!passwordChecks[item.key]">
+                      <span class="font-bold">{{ passwordChecks[item.key] ? '✓' : '✗' }}</span>
+                      {{ item.label }}
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Confirm password -->
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Confirmer *</label>
+              <div class="relative">
+                <input [type]="showConfirm ? 'text' : 'password'"
+                       formControlName="confirmPassword"
+                       placeholder="Répéter le mot de passe..."
+                       class="w-full h-10 px-3 pr-10 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                       [class]="inputClass(pConfirmPassword, passwordSubmitted)">
+                <button type="button" (click)="showConfirm = !showConfirm"
+                        class="absolute right-3 top-2.5 text-gray-400 text-xs">
+                  {{ showConfirm ? 'Masquer' : 'Afficher' }}
+                </button>
+              </div>
+              @if (passwordForm.errors?.['mustMatch'] && pConfirmPassword?.touched) {
+                <p class="text-xs text-red-600 mt-0.5">Les mots de passe ne correspondent pas.</p>
+              }
+            </div>
+
+            <button type="submit"
+                    [disabled]="passwordForm.invalid"
+                    class="w-full py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white
+                           hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Valider
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════
+         P2 Q2 — Async validator
+    ══════════════════════════════════════════════════════════════ -->
+    @if (activeSection === 'p2-async') {
+      <div class="max-w-lg mx-auto">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-base font-bold text-gray-800 mb-1">Partie 2 Q2 — Validateur asynchrone</h2>
+          <p class="text-xs text-gray-500 mb-2">Emails déjà pris : test&#64;test.com · admin&#64;admin.com · user&#64;user.com</p>
+
+          <form [formGroup]="asyncForm" (ngSubmit)="onAsyncSubmit()" class="space-y-4">
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Email *</label>
+              <div class="relative">
+                <input type="email" formControlName="email"
+                       placeholder="Essayez test@test.com..."
+                       class="w-full h-10 px-3 pr-24 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                       [class]="inputClass(asyncEmail, asyncSubmitted)">
+
+                <!-- Pending indicator -->
+                @if (asyncEmail?.pending) {
+                  <div class="absolute right-3 top-2.5 flex items-center gap-1.5 text-xs text-indigo-600">
+                    <div class="w-3.5 h-3.5 border-2 border-indigo-400 border-t-transparent
+                                rounded-full animate-spin"></div>
+                    Vérification...
+                  </div>
+                }
+                @if (!asyncEmail?.pending && asyncEmail?.valid && asyncEmail?.touched) {
+                  <span class="absolute right-3 top-2.5 text-xs text-green-600 font-semibold">✓ Disponible</span>
+                }
+              </div>
+
+              @if (asyncEmail?.touched && asyncEmail?.errors?.['required']) {
+                <p class="text-xs text-red-600 mt-0.5">L'email est obligatoire.</p>
+              }
+              @if (asyncEmail?.touched && asyncEmail?.errors?.['email']) {
+                <p class="text-xs text-red-600 mt-0.5">Format email invalide.</p>
+              }
+              @if (asyncEmail?.touched && asyncEmail?.errors?.['emailExists']) {
+                <p class="text-xs text-red-600 mt-0.5">Cet email est déjà utilisé.</p>
+              }
+            </div>
+
+            <button type="submit"
+                    [disabled]="asyncForm.invalid || asyncEmail?.pending"
+                    class="w-full py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white
+                           hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Vérifier et soumettre
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════
+         P3 — FormBuilder user form
+    ══════════════════════════════════════════════════════════════ -->
+    @if (activeSection === 'p3-builder') {
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-base font-bold text-gray-800 mb-1">Partie 3 — FormBuilder</h2>
+          <p class="text-xs text-gray-500 mb-5">nom, prénom, email, age (18-100), ville + getters + markAllTouched + reset</p>
+
+          <form [formGroup]="userForm" (ngSubmit)="onUserSubmit()" class="space-y-4">
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Nom *</label>
+                <input type="text" formControlName="nom" placeholder="Dupont"
+                       class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                       [class]="inputClass(uNom, userSubmitted)">
+                @if (errMsg(uNom)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(uNom) }}</p> }
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Prénom *</label>
+                <input type="text" formControlName="prenom" placeholder="Jean"
+                       class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                       [class]="inputClass(uPrenom, userSubmitted)">
+                @if (errMsg(uPrenom)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(uPrenom) }}</p> }
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Email *</label>
+              <input type="email" formControlName="email" placeholder="jean@exemple.com"
+                     class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                     [class]="inputClass(uEmail, userSubmitted)">
+              @if (errMsg(uEmail)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(uEmail) }}</p> }
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Âge * (18-100)</label>
+                <input type="number" formControlName="age" placeholder="25"
+                       class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                       [class]="inputClass(uAge, userSubmitted)">
+                @if (errMsg(uAge)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(uAge) }}</p> }
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Ville *</label>
+                <input type="text" formControlName="ville" placeholder="Paris"
+                       class="w-full h-10 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                       [class]="inputClass(uVille, userSubmitted)">
+                @if (errMsg(uVille)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(uVille) }}</p> }
+              </div>
+            </div>
+
+            <div class="flex gap-3 justify-end pt-2">
+              <button type="button" (click)="markFormGroupTouched()"
+                      class="px-4 py-2 text-sm font-semibold rounded-lg border border-orange-300
+                             text-orange-600 hover:bg-orange-50 transition-colors">
+                Marquer tout touché
+              </button>
+              <button type="button" (click)="resetUserForm()"
+                      class="px-4 py-2 text-sm font-semibold rounded-lg border border-gray-300
+                             text-gray-600 hover:bg-gray-50 transition-colors">
+                Réinitialiser
+              </button>
+              <button type="submit"
+                      [disabled]="userForm.invalid"
+                      class="px-4 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white
+                             hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                Sauvegarder
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════
+         P4 Q1 — Email FormArray
+    ══════════════════════════════════════════════════════════════ -->
+    @if (activeSection === 'p4-emails') {
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+
+        <!-- Left: form -->
+        <section class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-base font-bold text-gray-800">Partie 4 Q1 — Email FormArray</h2>
+            <span class="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-100 text-indigo-700">
+              {{ emails.length }} entrée{{ emails.length > 1 ? 's' : '' }}
+            </span>
+          </div>
+
+          <form [formGroup]="emailArrayForm" (ngSubmit)="onEmailArraySubmit()">
+            <div formArrayName="emails" class="flex flex-col gap-3 mb-4">
+              @for (g of emails.controls; track $index; let i = $index) {
+                <div [formGroupName]="i"
+                     class="flex items-start gap-3 p-4 rounded-lg border transition-colors"
+                     [class.border-red-300]="isEmailRowInvalid(i)"
+                     [class.bg-red-50]="isEmailRowInvalid(i)"
+                     [class.border-green-300]="!isEmailRowInvalid(i) && getEmailControl(i).valid"
+                     [class.bg-green-50]="!isEmailRowInvalid(i) && getEmailControl(i).valid"
+                     [class.border-gray-200]="!isEmailRowInvalid(i) && !getEmailControl(i).valid"
+                     [class.bg-gray-50]="!isEmailRowInvalid(i) && !getEmailControl(i).valid">
+
+                  <div class="w-7 h-7 min-w-[28px] mt-7 rounded-full bg-indigo-100 text-indigo-700
+                              text-xs font-bold flex items-center justify-center">{{ i + 1 }}</div>
+
+                  <div class="flex-1 grid grid-cols-3 gap-3">
+                    <div class="col-span-2 flex flex-col gap-1">
+                      <label class="text-xs font-semibold text-gray-600">Email *</label>
+                      <input type="email" formControlName="email"
+                             placeholder="utilisateur@domaine.com"
+                             class="h-9 px-3 text-sm border rounded-lg outline-none transition-all focus:ring-2"
+                             [class]="inputClass(getEmailControl(i), emailArraySubmitted)">
+                      @if (getEmailError(i)) {
+                        <p class="text-xs text-red-600">{{ getEmailError(i) }}</p>
+                      }
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <label class="text-xs font-semibold text-gray-600">Type</label>
+                      <select formControlName="type"
+                              class="h-9 px-2 text-sm border border-gray-300 rounded-lg outline-none
+                                     focus:ring-2 focus:ring-indigo-300 bg-white">
+                        @for (t of EMAIL_TYPES; track t) {
+                          <option [value]="t">{{ t }}</option>
+                        }
+                      </select>
+                    </div>
+                  </div>
+
+                  <button type="button"
+                          [disabled]="emails.length === 1"
+                          (click)="removeEmail(i)"
+                          class="mt-7 w-8 h-8 min-w-[32px] flex items-center justify-center rounded-lg
+                                 border border-red-200 text-red-400 text-sm hover:bg-red-50
+                                 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                    ✕
+                  </button>
+                </div>
+              }
+            </div>
+
+            <button type="button" (click)="addEmail()"
+                    class="w-full py-2.5 mb-4 border-2 border-dashed border-indigo-300 rounded-lg
+                           text-indigo-600 text-sm font-semibold flex items-center justify-center gap-2
+                           hover:bg-indigo-50 transition-colors">
+              + Ajouter une adresse
+            </button>
+
+            @if (emailArrayForm.invalid && emailArraySubmitted) {
+              <div class="mb-4 px-4 py-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                ⚠️ Veuillez corriger les erreurs.
+              </div>
+            }
+
+            <div class="flex justify-end gap-3">
+              <button type="button" (click)="resetEmailForm()"
+                      class="px-4 py-2 text-sm font-semibold rounded-lg border border-gray-300
+                             text-gray-600 hover:bg-gray-50 transition-colors">
+                Réinitialiser
+              </button>
+              <button type="submit" [disabled]="emailArrayForm.invalid"
+                      class="px-4 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white
+                             hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                Sauvegarder
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Right: preview -->
+        <section class="flex flex-col gap-4">
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-sm font-bold text-gray-800">Emails valides</h2>
+              <span class="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                {{ validEmails.length }}
+              </span>
+            </div>
+            @if (validEmails.length === 0) {
+              <p class="text-center py-6 text-xs text-gray-400">Aucun email valide pour l'instant.</p>
+            }
+            <div class="flex flex-col gap-2">
+              @for (e of validEmails; track $index) {
+                <div class="flex items-center gap-3 px-3 py-2.5 border border-gray-100 rounded-lg bg-gray-50">
+                  <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold text-sm
+                              flex items-center justify-center">
+                    {{ e.email[0].toUpperCase() }}
+                  </div>
+                  <div class="flex-1 flex items-center justify-between gap-2 min-w-0">
+                    <span class="text-sm font-medium text-gray-800 truncate">{{ e.email }}</span>
+                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full flex-shrink-0"
+                          [class.bg-blue-100]="e.type === 'Personnel'"
+                          [class.text-blue-700]="e.type === 'Personnel'"
+                          [class.bg-purple-100]="e.type === 'Professionnel'"
+                          [class.text-purple-700]="e.type === 'Professionnel'"
+                          [class.bg-gray-100]="e.type === 'Autre'"
+                          [class.text-gray-600]="e.type === 'Autre'">
+                      {{ e.type }}
+                    </span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+            <p class="text-xs font-semibold text-gray-500 mb-2">JSON :</p>
+            <pre class="text-xs font-mono text-gray-500 bg-gray-50 border border-gray-200
+                        rounded-lg p-3 overflow-x-auto max-h-40 overflow-y-auto">{{ emailArrayForm.value | json }}</pre>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div class="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+              <span class="block text-2xl font-bold text-indigo-600">{{ emails.length }}</span>
+              <span class="block text-xs text-gray-500 uppercase tracking-wide mt-1">Total</span>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+              <span class="block text-2xl font-bold text-green-600">{{ validEmails.length }}</span>
+              <span class="block text-xs text-gray-500 uppercase tracking-wide mt-1">Valides</span>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+              <span class="block text-2xl font-bold text-red-500">{{ emails.length - validEmails.length }}</span>
+              <span class="block text-xs text-gray-500 uppercase tracking-wide mt-1">Invalides</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════
+         P4 Q2 — Competences FormArray
+    ══════════════════════════════════════════════════════════════ -->
+    @if (activeSection === 'p4-competences') {
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-base font-bold text-gray-800 mb-1">Partie 4 Q2 — Compétences</h2>
+          <p class="text-xs text-gray-500 mb-5">Min 3 compétences requises · Niveau 1-5 · validateur personnalisé FormGroup</p>
+
+          <form [formGroup]="competencesForm" (ngSubmit)="onCompetencesSubmit()">
+            <div formArrayName="competences" class="flex flex-col gap-3 mb-4">
+
+              @if (competences.length === 0) {
+                <div class="text-center py-6 text-gray-400 border-2 border-dashed border-gray-200 rounded-lg">
+                  <p class="text-sm">Aucune compétence ajoutée.</p>
+                  <p class="text-xs mt-1">Cliquez sur "Ajouter" pour commencer.</p>
+                </div>
+              }
+
+              @for (g of competences.controls; track $index; let i = $index) {
+                <div [formGroupName]="i"
+                     class="flex items-start gap-3 p-4 rounded-lg border bg-gray-50 border-gray-200">
+
+                  <div class="w-7 h-7 min-w-[28px] mt-6 rounded-full bg-purple-100 text-purple-700
+                              text-xs font-bold flex items-center justify-center">{{ i + 1 }}</div>
+
+                  <div class="flex-1 grid grid-cols-3 gap-3">
+                    <div class="col-span-2 flex flex-col gap-1">
+                      <label class="text-xs font-semibold text-gray-600">Compétence *</label>
+                      <input type="text" formControlName="nom" placeholder="ex: Angular, Python..."
+                             class="h-9 px-3 text-sm border rounded-lg outline-none focus:ring-2 focus:ring-purple-300"
+                             [class]="inputClass(getCompetenceNom(i), competencesSubmitted)">
+                      @if (getCompetenceNom(i).invalid && (getCompetenceNom(i).touched || competencesSubmitted)) {
+                        <p class="text-xs text-red-600">Le nom est obligatoire.</p>
+                      }
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <label class="text-xs font-semibold text-gray-600">Niveau (1-5) *</label>
+                      <input type="number" formControlName="niveau" min="1" max="5"
+                             class="h-9 px-3 text-sm border rounded-lg outline-none focus:ring-2 focus:ring-purple-300"
+                             [class]="inputClass(getCompetenceNiveau(i), competencesSubmitted)">
+                      @if (getCompetenceNiveau(i).invalid && (getCompetenceNiveau(i).touched || competencesSubmitted)) {
+                        <p class="text-xs text-red-600">Niveau entre 1 et 5.</p>
+                      }
+                    </div>
+                  </div>
+
+                  <button type="button" (click)="removeCompetence(i)"
+                          class="mt-6 w-8 h-8 min-w-[32px] flex items-center justify-center rounded-lg
+                                 border border-red-200 text-red-400 text-sm hover:bg-red-50
+                                 transition-colors">✕</button>
+                </div>
+              }
+            </div>
+
+            <!-- minCompetences error (FormGroup-level validator) -->
+            @if (competencesForm.errors?.['minCompetences'] && (competences.touched || competencesSubmitted)) {
+              <div class="mb-4 px-4 py-2.5 rounded-lg bg-orange-50 border border-orange-200 text-orange-700 text-sm">
+                ⚠️ Au moins 3 compétences sont requises
+                ({{ competencesForm.errors?.['minCompetences'].actual }}/3).
+              </div>
+            }
+
+            <button type="button" (click)="addCompetence()"
+                    class="w-full py-2.5 mb-4 border-2 border-dashed border-purple-300 rounded-lg
+                           text-purple-600 text-sm font-semibold flex items-center justify-center gap-2
+                           hover:bg-purple-50 transition-colors">
+              + Ajouter une compétence
+            </button>
+
+            <button type="submit"
+                    [disabled]="competencesForm.invalid"
+                    class="w-full py-2 rounded-lg text-sm font-semibold bg-purple-600 text-white
+                           hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Valider les compétences
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════
+         P5 Q1 — Nested address FormGroup
+    ══════════════════════════════════════════════════════════════ -->
+    @if (activeSection === 'p5-address') {
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-base font-bold text-gray-800 mb-1">Partie 5 Q1 — FormGroup imbriqué (adresse)</h2>
+          <p class="text-xs text-gray-500 mb-5">formGroupName="adresse" · getter adresse · code postal pattern</p>
+
+          <form [formGroup]="addressForm" (ngSubmit)="onAddressSubmit()" class="space-y-5">
+
+            <!-- Personal info -->
+            <div>
+              <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">
+                Informations personnelles
+              </h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Nom *</label>
+                  <input type="text" formControlName="nom"
+                         class="w-full h-10 px-3 text-sm border rounded-lg outline-none focus:ring-2"
+                         [class]="inputClass(aNom, addressSubmitted)">
+                  @if (errMsg(aNom)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(aNom) }}</p> }
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Prénom *</label>
+                  <input type="text" formControlName="prenom"
+                         class="w-full h-10 px-3 text-sm border rounded-lg outline-none focus:ring-2"
+                         [class]="inputClass(aPrenom, addressSubmitted)">
+                  @if (errMsg(aPrenom)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(aPrenom) }}</p> }
+                </div>
+              </div>
+              <div class="mt-4">
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Email *</label>
+                <input type="email" formControlName="email"
+                       class="w-full h-10 px-3 text-sm border rounded-lg outline-none focus:ring-2"
+                       [class]="inputClass(aEmail, addressSubmitted)">
+                @if (errMsg(aEmail)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(aEmail) }}</p> }
+              </div>
+            </div>
+
+            <!-- Nested address FormGroup -->
+            <div formGroupName="adresse">
+              <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">
+                Adresse <span class="text-indigo-500">(formGroupName="adresse")</span>
+              </h3>
+              <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 space-y-3">
+
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Rue *</label>
+                  <input type="text" formControlName="rue" placeholder="12 rue de la Paix"
+                         class="w-full h-10 px-3 text-sm border rounded-lg outline-none focus:ring-2"
+                         [class]="inputClass(aRue, addressSubmitted)">
+                  @if (errMsg(aRue)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(aRue) }}</p> }
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Code postal *</label>
+                    <input type="text" formControlName="codePostal" placeholder="75001"
+                           class="w-full h-10 px-3 text-sm border rounded-lg outline-none focus:ring-2"
+                           [class]="inputClass(aCodePostal, addressSubmitted)">
+                    @if (aCodePostal?.touched && aCodePostal?.errors?.['pattern']) {
+                      <p class="text-xs text-red-600 mt-0.5">5 chiffres requis (ex: 75001).</p>
+                    }
+                    @if (aCodePostal?.touched && aCodePostal?.errors?.['required']) {
+                      <p class="text-xs text-red-600 mt-0.5">Ce champ est obligatoire.</p>
+                    }
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Ville *</label>
+                    <input type="text" formControlName="ville" placeholder="Paris"
+                           class="w-full h-10 px-3 text-sm border rounded-lg outline-none focus:ring-2"
+                           [class]="inputClass(aVille, addressSubmitted)">
+                    @if (errMsg(aVille)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(aVille) }}</p> }
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Pays *</label>
+                  <input type="text" formControlName="pays"
+                         class="w-full h-10 px-3 text-sm border rounded-lg outline-none focus:ring-2"
+                         [class]="inputClass(aPays, addressSubmitted)">
+                  @if (errMsg(aPays)) { <p class="text-xs text-red-600 mt-0.5">{{ errMsg(aPays) }}</p> }
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" [disabled]="addressForm.invalid"
+                    class="w-full py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white
+                           hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Soumettre
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════
+         P5 Q2 — Multi-address FormArray
+    ══════════════════════════════════════════════════════════════ -->
+    @if (activeSection === 'p5-multi-address') {
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-base font-bold text-gray-800 mb-1">Partie 5 Q2 — Plusieurs adresses (FormArray + FormGroup)</h2>
+          <p class="text-xs text-gray-500 mb-5">formArrayName="adresses" · createAddressGroup() · au moins 1 adresse requise</p>
+
+          <form [formGroup]="multiAddressForm" (ngSubmit)="onMultiAddressSubmit()" class="space-y-5">
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Nom *</label>
+                <input type="text" formControlName="nom"
+                       class="w-full h-10 px-3 text-sm border rounded-lg outline-none focus:ring-2 border-gray-300">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Email *</label>
+                <input type="email" formControlName="email"
+                       class="w-full h-10 px-3 text-sm border rounded-lg outline-none focus:ring-2 border-gray-300">
+              </div>
+            </div>
+
+            <!-- Addresses FormArray -->
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                  Adresses <span class="text-indigo-500">(formArrayName="adresses")</span>
+                </h3>
+                <span class="text-xs font-semibold px-2 py-1 rounded-full bg-indigo-100 text-indigo-700">
+                  {{ adresses.length }}
+                </span>
+              </div>
+
+              <div formArrayName="adresses" class="flex flex-col gap-3">
+                @for (g of adresses.controls; track $index; let i = $index) {
+                  <div [formGroupName]="i"
+                       class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="text-xs font-bold text-gray-600">Adresse {{ i + 1 }}</span>
+                      <button type="button"
+                              [disabled]="adresses.length === 1"
+                              (click)="removeAddress(i)"
+                              class="text-xs text-red-500 hover:text-red-700 disabled:opacity-30
+                                     disabled:cursor-not-allowed transition-colors">
+                        Supprimer
+                      </button>
+                    </div>
+
+                    <div class="space-y-3">
+                      <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Type *</label>
+                        <select formControlName="type"
+                                class="w-full h-9 px-3 text-sm border border-gray-300 rounded-lg
+                                       outline-none focus:ring-2 focus:ring-indigo-300 bg-white">
+                          @for (t of ADDRESS_TYPES; track t) {
+                            <option [value]="t">{{ t }}</option>
+                          }
+                        </select>
+                      </div>
+                      <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Rue *</label>
+                        <input type="text" formControlName="rue" placeholder="12 rue de la Paix"
+                               class="w-full h-9 px-3 text-sm border border-gray-300 rounded-lg
+                                      outline-none focus:ring-2 focus:ring-indigo-300">
+                      </div>
+                      <div class="grid grid-cols-2 gap-3">
+                        <div>
+                          <label class="block text-xs font-semibold text-gray-600 mb-1">Code postal *</label>
+                          <input type="text" formControlName="codePostal" placeholder="75001"
+                                 class="w-full h-9 px-3 text-sm border border-gray-300 rounded-lg
+                                        outline-none focus:ring-2 focus:ring-indigo-300">
+                        </div>
+                        <div>
+                          <label class="block text-xs font-semibold text-gray-600 mb-1">Ville *</label>
+                          <input type="text" formControlName="ville" placeholder="Paris"
+                                 class="w-full h-9 px-3 text-sm border border-gray-300 rounded-lg
+                                        outline-none focus:ring-2 focus:ring-indigo-300">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <button type="button" (click)="addAddress()"
+                      class="w-full mt-3 py-2.5 border-2 border-dashed border-indigo-300 rounded-lg
+                             text-indigo-600 text-sm font-semibold flex items-center justify-center gap-2
+                             hover:bg-indigo-50 transition-colors">
+                + Ajouter une adresse
+              </button>
+            </div>
+
+            <button type="submit" [disabled]="multiAddressForm.invalid"
+                    class="w-full py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white
+                           hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Soumettre
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>
